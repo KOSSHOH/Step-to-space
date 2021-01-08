@@ -1,0 +1,50 @@
+name: shopping_figma_one
+description: A new Flutter application.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.0
+  shimmer: ^1.1.1
+  rxdart: ^0.20.0
+  bottom_navy_bar: ^5.6.0
+  flutter_svg: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/img/
+
+
+  fonts:
+    - family: SFProDisplay
+      fonts:
+        - asset: assets/fonts/SFProDisplay-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProDisplay-Bold.ttf
+          weight: 700
+    - family: SFProText
+      fonts:
+        - asset: assets/fonts/SFProText-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProText-Bold.ttf
+          weight: 700
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
