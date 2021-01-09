@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/home_bloc.dart';
 import 'package:shopping_figma_one/src/model/home_item_model.dart';

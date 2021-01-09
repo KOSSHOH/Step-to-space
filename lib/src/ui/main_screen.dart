@@ -76,7 +76,6 @@ class _MainScreenState extends State<MainScreen> {
               child: Container(
                 color: AppTheme.black,
                 child: BottomNavyBar(
-
                   selectedIndex: _currentIndex,
                   onItemSelected: (index) {
                     setState(() => _currentIndex = index);
@@ -99,32 +98,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-
           )
         ],
       ),
-      // bottomNavigationBar: BottomNavyBar(
-      //   selectedIndex: _currentIndex,
-      //   showElevation: true,
-      //   onItemSelected: (index) {
-      //     setState(() => _currentIndex = index);
-      //     _pageController.jumpToPage(index);
-      //   },
-      //   items: <BottomNavyBarItem>[
-      //     BottomNavyBarItem(
-      //       title: Text('Item One'),
-      //       icon: Icon(Icons.home),
-      //     ),
-      //     BottomNavyBarItem(
-      //       title: Text('Item Two'),
-      //       icon: Icon(Icons.apps),
-      //     ),
-      //     BottomNavyBarItem(
-      //       title: Text('Item Three'),
-      //       icon: Icon(Icons.chat_bubble),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
