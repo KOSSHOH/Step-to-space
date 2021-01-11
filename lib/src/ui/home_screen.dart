@@ -144,10 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Container(
                                 child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(
@@ -165,11 +163,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: Hero(
                                         child: Image.asset(
-                                          snapshot.data.justDropped[index]
-                                              .image,
+                                          snapshot
+                                              .data.justDropped[index].image,
                                         ),
-                                        tag: snapshot
-                                            .data.justDropped[index],
+                                        tag: snapshot.data.justDropped[index],
                                       ),
                                       height: 85,
                                       width: 120,
@@ -285,96 +282,105 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children:
-                    snapshot.data.mostPopular.map((ItemModel value) {
-                      return new Container(
-                        margin: new EdgeInsets.only(
-                          bottom: 15,
-                          right: 15,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Center(
-                                child: Container(
-                                  child: Image.asset(
-                                    value.image,
-                                  ),
-                                  height: 50,
-                                  width: 70,
-                                ),
-                              ),
-                              width: 88,
-                              height: 88,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ),
-                                color: AppTheme.black5,
+                    children: snapshot.data.mostPopular.map((ItemModel value) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ItemScreen(
+                                itemModel: value,
                               ),
                             ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 22,
-                                    width: 24,
-                                    margin: EdgeInsets.only(
-                                      bottom: 4,
+                          );
+                        },
+                        child: Container(
+                          margin: new EdgeInsets.only(
+                            bottom: 15,
+                            right: 15,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: Container(
+                                    child: Image.asset(
+                                      value.image,
                                     ),
-                                    child: SvgPicture.asset(
-                                      value.companyImage,
-                                    ),
+                                    height: 50,
+                                    width: 70,
                                   ),
-                                  Text(
-                                    value.name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12,
-                                      height: 1.33,
-                                      color: AppTheme.black,
-                                    ),
+                                ),
+                                width: 88,
+                                height: 88,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    value.type,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 11,
-                                      height: 1.45,
-                                      color: AppTheme.black30,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    "\$" + value.price.toString(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      height: 1.43,
-                                      color: AppTheme.black,
-                                    ),
-                                  ),
-                                ],
+                                  color: AppTheme.black5,
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 22,
+                                      width: 24,
+                                      margin: EdgeInsets.only(
+                                        bottom: 4,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        value.companyImage,
+                                      ),
+                                    ),
+                                    Text(
+                                      value.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                        height: 1.33,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      value.type,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 11,
+                                        height: 1.45,
+                                        color: AppTheme.black30,
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Text(
+                                      "\$" + value.price.toString(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        height: 1.43,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),
@@ -506,114 +512,123 @@ class _HomeScreenState extends State<HomeScreen> {
                     scrollDirection: Axis.horizontal,
                     padding: EdgeInsets.only(left: 29),
                     itemBuilder: (context, index) {
-                      return Container(
-                        width: 150,
-                        height: 234,
-                        margin: EdgeInsets.only(
-                          right: 15,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      top: 23,
-                                      left: 15,
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ItemScreen(
+                                itemModel: snapshot.data.recommended[index],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 150,
+                          height: 234,
+                          margin: EdgeInsets.only(
+                            right: 15,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        top: 23,
+                                        left: 15,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        snapshot.data.recommended[index]
+                                            .companyImage,
+                                      ),
                                     ),
-                                    child: SvgPicture.asset(
-                                      snapshot.data.recommended[index]
-                                          .companyImage,
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        left: 15,
+                                      ),
+                                      child: Image.asset(
+                                        snapshot.data.recommended[index].image,
+                                      ),
+                                      height: 85,
+                                      width: 120,
                                     ),
+                                  ],
+                                ),
+                                width: 150,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      left: 15,
-                                    ),
-                                    child: Image.asset(
-                                      snapshot
-                                          .data.recommended[index].image,
-                                    ),
-                                    height: 85,
-                                    width: 120,
+                                  color: AppTheme.black5,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  snapshot.data.recommended[index].name,
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                    height: 1.33,
+                                    color: AppTheme.black,
                                   ),
-                                ],
-                              ),
-                              width: 150,
-                              height: 150,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  12,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                color: AppTheme.black5,
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                snapshot.data.recommended[index].name,
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 12,
-                                  height: 1.33,
-                                  color: AppTheme.black,
+                                width: 150,
+                                margin: EdgeInsets.only(
+                                  top: 10,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              width: 150,
-                              margin: EdgeInsets.only(
-                                top: 10,
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                snapshot.data.recommended[index].type,
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 11,
-                                  height: 1.45,
-                                  color: AppTheme.black30,
+                              Container(
+                                child: Text(
+                                  snapshot.data.recommended[index].type,
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 11,
+                                    height: 1.45,
+                                    color: AppTheme.black30,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              width: 150,
-                              margin: EdgeInsets.only(
-                                top: 4,
-                              ),
-                            ),
-                            Container(
-                              child: Text(
-                                "\$" +
-                                    snapshot.data.recommended[index].price
-                                        .toString(),
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  height: 1.43,
-                                  color: AppTheme.black,
+                                width: 150,
+                                margin: EdgeInsets.only(
+                                  top: 4,
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                              width: 150,
-                              margin: EdgeInsets.only(
-                                top: 2,
+                              Container(
+                                child: Text(
+                                  "\$" +
+                                      snapshot.data.recommended[index].price
+                                          .toString(),
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    height: 1.43,
+                                    color: AppTheme.black,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                width: 150,
+                                margin: EdgeInsets.only(
+                                  top: 2,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -653,96 +668,105 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children:
-                    snapshot.data.newLowest.map((ItemModel value) {
-                      return new Container(
-                        margin: new EdgeInsets.only(
-                          bottom: 15,
-                          right: 15,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Center(
-                                child: Container(
-                                  child: Image.asset(
-                                    value.image,
-                                  ),
-                                  height: 50,
-                                  width: 70,
-                                ),
-                              ),
-                              width: 88,
-                              height: 88,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ),
-                                color: AppTheme.black5,
+                    children: snapshot.data.newLowest.map((ItemModel value) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ItemScreen(
+                                itemModel: value,
                               ),
                             ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 22,
-                                    width: 24,
-                                    margin: EdgeInsets.only(
-                                      bottom: 4,
+                          );
+                        },
+                        child: Container(
+                          margin: new EdgeInsets.only(
+                            bottom: 15,
+                            right: 15,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: Container(
+                                    child: Image.asset(
+                                      value.image,
                                     ),
-                                    child: SvgPicture.asset(
-                                      value.companyImage,
-                                    ),
+                                    height: 50,
+                                    width: 70,
                                   ),
-                                  Text(
-                                    value.name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12,
-                                      height: 1.33,
-                                      color: AppTheme.black,
-                                    ),
+                                ),
+                                width: 88,
+                                height: 88,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    value.type,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 11,
-                                      height: 1.45,
-                                      color: AppTheme.black30,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    "\$" + value.price.toString(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      height: 1.43,
-                                      color: AppTheme.black,
-                                    ),
-                                  ),
-                                ],
+                                  color: AppTheme.black5,
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 22,
+                                      width: 24,
+                                      margin: EdgeInsets.only(
+                                        bottom: 4,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        value.companyImage,
+                                      ),
+                                    ),
+                                    Text(
+                                      value.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                        height: 1.33,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      value.type,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 11,
+                                        height: 1.45,
+                                        color: AppTheme.black30,
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Text(
+                                      "\$" + value.price.toString(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        height: 1.43,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),
@@ -783,96 +807,105 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    children:
-                    snapshot.data.newHighest.map((ItemModel value) {
-                      return new Container(
-                        margin: new EdgeInsets.only(
-                          bottom: 15,
-                          right: 15,
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              child: Center(
-                                child: Container(
-                                  child: Image.asset(
-                                    value.image,
-                                  ),
-                                  height: 50,
-                                  width: 70,
-                                ),
-                              ),
-                              width: 88,
-                              height: 88,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  12,
-                                ),
-                                color: AppTheme.black5,
+                    children: snapshot.data.newHighest.map((ItemModel value) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ItemScreen(
+                                itemModel: value,
                               ),
                             ),
-                            SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 22,
-                                    width: 24,
-                                    margin: EdgeInsets.only(
-                                      bottom: 4,
+                          );
+                        },
+                        child: Container(
+                          margin: new EdgeInsets.only(
+                            bottom: 15,
+                            right: 15,
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                child: Center(
+                                  child: Container(
+                                    child: Image.asset(
+                                      value.image,
                                     ),
-                                    child: SvgPicture.asset(
-                                      value.companyImage,
-                                    ),
+                                    height: 50,
+                                    width: 70,
                                   ),
-                                  Text(
-                                    value.name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 12,
-                                      height: 1.33,
-                                      color: AppTheme.black,
-                                    ),
+                                ),
+                                width: 88,
+                                height: 88,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    12,
                                   ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    value.type,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 11,
-                                      height: 1.45,
-                                      color: AppTheme.black30,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    "\$" + value.price.toString(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontFamily: AppTheme.fontText,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                      height: 1.43,
-                                      color: AppTheme.black,
-                                    ),
-                                  ),
-                                ],
+                                  color: AppTheme.black5,
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 15),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 22,
+                                      width: 24,
+                                      margin: EdgeInsets.only(
+                                        bottom: 4,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        value.companyImage,
+                                      ),
+                                    ),
+                                    Text(
+                                      value.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                        height: 1.33,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      value.type,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 11,
+                                        height: 1.45,
+                                        color: AppTheme.black30,
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Text(
+                                      "\$" + value.price.toString(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontStyle: FontStyle.normal,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        height: 1.43,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }).toList(),

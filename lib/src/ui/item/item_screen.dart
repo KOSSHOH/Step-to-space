@@ -76,6 +76,7 @@ class _ItemScreenState extends State<ItemScreen> {
               backgroundColor: Colors.grey[300],
               floating: true,
               snap: true,
+              brightness: Brightness.dark,
               pinned: false,
               expandedHeight: 339,
               flexibleSpace: FlexibleSpaceBar(
@@ -1238,7 +1239,6 @@ class _ItemScreenState extends State<ItemScreen> {
                                               color: AppTheme.black,
                                             ),
                                           ),
-
                                         ],
                                       ),
                                       SizedBox(height: 6),
@@ -1268,18 +1268,6 @@ class _ItemScreenState extends State<ItemScreen> {
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 60),
-                      Text(
-                        "Related Products",
-                        style: TextStyle(
-                          fontFamily: AppTheme.fontText,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          height: 1.5,
-                          color: AppTheme.black,
                         ),
                       ),
                       SizedBox(height: 20),
