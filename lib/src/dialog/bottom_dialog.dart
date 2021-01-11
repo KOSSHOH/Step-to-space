@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/shopping_block.dart';
+import 'package:shopping_figma_one/src/bloc/size_block.dart';
 import 'package:shopping_figma_one/src/model/item_model.dart';
+import 'package:shopping_figma_one/src/model/size_model.dart';
 
 class BottomDialog {
   static void itemBuy(BuildContext context, ItemModel item) {
@@ -141,6 +143,10 @@ class BottomDialog {
                       builder: (context, AsyncSnapshot<String> snapshot) {
                         if (snapshot.hasData) {
                           return GestureDetector(
+                            onTap: () {
+                              sizeBloc.fetchAllSize();
+                              BottomDialog.itemSize(context);
+                            },
                             child: Container(
                               height: 56,
                               margin: EdgeInsets.only(
@@ -189,6 +195,10 @@ class BottomDialog {
                           );
                         }
                         return GestureDetector(
+                          onTap: () {
+                            sizeBloc.fetchAllSize();
+                            BottomDialog.itemSize(context);
+                          },
                           child: Container(
                             height: 56,
                             margin: EdgeInsets.only(
@@ -558,6 +568,205 @@ class BottomDialog {
                         );
                       },
                     ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static void itemSize(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
+              margin: EdgeInsets.only(top: 44),
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 22.5,
+                  right: 22.5,
+                  top: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  color: AppTheme.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 44,
+                      decoration: BoxDecoration(
+                        color: AppTheme.black10,
+                        borderRadius: BorderRadius.circular(
+                          10.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Select U.S Men’s Size",
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontText,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        height: 1.5,
+                        color: AppTheme.black,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        bottom: 16,
+                        top: 16,
+                        right: 20,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppTheme.black5,
+                        borderRadius: BorderRadius.circular(
+                          72,
+                        ),
+                      ),
+                      margin: EdgeInsets.only(
+                        top: 30,
+                        left: 7.5,
+                        right: 7.5,
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "All Size",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              height: 1.45,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          Text(
+                            "\$237",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: StreamBuilder(
+                          stream: sizeBloc.allSize,
+                          builder: (context,
+                              AsyncSnapshot<List<SizeModel>> snapshot) {
+                            if (snapshot.hasData) {
+                              return GridView.count(
+                                  padding: EdgeInsets.only(
+                                    top: 15,
+                                  ),
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1.0,
+                                  mainAxisSpacing: 4.0,
+                                  crossAxisSpacing: 4.0,
+                                  children: snapshot.data.map((SizeModel data) {
+                                    return GestureDetector(
+                                      onTap: (){
+                                        shoppingBloc.fetchAllShopping(data.size);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.all(7.5),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.black5,
+                                          borderRadius:
+                                          BorderRadius.circular(100),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "US " + data.size,
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                height: 1.45,
+                                                color: AppTheme.black,
+                                              ),
+                                            ),
+                                            SizedBox(height: 3),
+                                            Text(
+                                              data.price == 0
+                                                  ? "BID"
+                                                  : "\$" + data.price.toString(),
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                height: 1.5,
+                                                color: data.price != 0
+                                                    ? AppTheme.green
+                                                    : AppTheme.black60,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }).toList());
+                            }
+                            return GridView.count(
+                                crossAxisCount: 3,
+                                padding: EdgeInsets.only(
+                                  top: 15,
+                                ),
+                                children: <String>[
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                  '',
+                                ].map((String url) {
+                                  return Container(
+                                    margin: EdgeInsets.all(7.5),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.black5,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  );
+                                }).toList());
+                          }),
+                    )
                   ],
                 ),
               ),

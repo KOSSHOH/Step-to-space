@@ -657,7 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: EdgeInsets.only(
                     top: 12,
                   ),
-                  child: new GridView.count(
+                  child:  GridView.count(
                     crossAxisCount: 2,
                     childAspectRatio: 0.3,
                     padding: EdgeInsets.only(
