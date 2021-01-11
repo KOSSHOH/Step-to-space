@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/dialog/bottom_dialog.dart';
 import 'package:shopping_figma_one/src/model/item_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -172,80 +173,87 @@ class _ItemScreenState extends State<ItemScreen> {
                       Row(
                         children: [
                           Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppTheme.green,
-                                borderRadius: BorderRadius.circular(
-                                  12.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                BottomDialog.itemBuy(context, widget.itemModel);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppTheme.green,
+                                  borderRadius: BorderRadius.circular(
+                                    12.0,
+                                  ),
                                 ),
-                              ),
-                              height: 72,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Buy",
-                                        style: TextStyle(
-                                          fontFamily: AppTheme.fontDisplay,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          height: 1.4,
-                                          color: AppTheme.white,
+                                height: 72,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Buy",
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontDisplay,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            height: 1.4,
+                                            color: AppTheme.white,
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 8.0),
-                                      Text(
-                                        "\$${widget.itemModel.price}",
-                                        style: TextStyle(
-                                          fontFamily: AppTheme.fontDisplay,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          height: 1.4,
-                                          color: AppTheme.white,
+                                        SizedBox(width: 8.0),
+                                        Text(
+                                          "\$${widget.itemModel.price}",
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontDisplay,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            height: 1.4,
+                                            color: AppTheme.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "or Bid",
-                                        style: TextStyle(
-                                          fontFamily: AppTheme.fontText,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 12,
-                                          height: 1.33,
-                                          color:
-                                              AppTheme.white.withOpacity(0.6),
+                                      ],
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "or Bid",
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontText,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 12,
+                                            height: 1.33,
+                                            color:
+                                                AppTheme.white.withOpacity(0.6),
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(width: 10.0),
-                                      Text(
-                                        "Lowest Ask",
-                                        style: TextStyle(
-                                          fontFamily: AppTheme.fontText,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 12,
-                                          height: 1.33,
-                                          color: AppTheme.white,
+                                        SizedBox(width: 10.0),
+                                        Text(
+                                          "Lowest Ask",
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontText,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 12,
+                                            height: 1.33,
+                                            color: AppTheme.white,
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
