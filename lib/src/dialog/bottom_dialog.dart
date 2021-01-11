@@ -480,44 +480,33 @@ class BottomDialog {
                           return GestureDetector(
                             child: Container(
                               padding: EdgeInsets.only(
-                                top: 17,
-                                bottom: 15,
-                                left: 61,
-                                right: 61,
+                                top: 16,
+                                bottom: 16,
+                                left: 30,
+                                right: 30,
                               ),
+                              width: 160,
                               decoration: BoxDecoration(
-                                color: AppTheme.white,
+                                color: AppTheme.blue,
                                 borderRadius: BorderRadius.circular(60.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.03),
-                                    spreadRadius: 0,
-                                    blurRadius: 20,
-                                    offset: Offset(
-                                      0,
-                                      4,
-                                    ), // changes position of shadow
-                                  ),
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.03),
-                                    spreadRadius: 0,
-                                    blurRadius: 4,
-                                    offset: Offset(
-                                      0,
-                                      2,
-                                    ), // changes position of shadow
-                                  ),
-                                ],
                               ),
-                              child: Text(
-                                "Next",
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  height: 1.5,
-                                  color: AppTheme.black30,
-                                ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Next",
+                                    style: TextStyle(
+                                      fontFamily: AppTheme.fontText,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      height: 1.5,
+                                      color: AppTheme.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 38),
+                                  SvgPicture.asset(
+                                    "assets/images/chevronRightWhite.svg",
+                                  )
+                                ],
                               ),
                             ),
                           );
@@ -525,8 +514,8 @@ class BottomDialog {
                         return GestureDetector(
                           child: Container(
                             padding: EdgeInsets.only(
-                              top: 17,
-                              bottom: 15,
+                              top: 16,
+                              bottom: 16,
                               left: 61,
                               right: 61,
                             ),
@@ -685,8 +674,9 @@ class BottomDialog {
                                   crossAxisSpacing: 4.0,
                                   children: snapshot.data.map((SizeModel data) {
                                     return GestureDetector(
-                                      onTap: (){
-                                        shoppingBloc.fetchAllShopping(data.size);
+                                      onTap: () {
+                                        shoppingBloc
+                                            .fetchAllShopping(data.size);
                                         Navigator.of(context).pop();
                                       },
                                       child: Container(
@@ -694,13 +684,13 @@ class BottomDialog {
                                         decoration: BoxDecoration(
                                           color: AppTheme.black5,
                                           borderRadius:
-                                          BorderRadius.circular(100),
+                                              BorderRadius.circular(100),
                                         ),
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "US " + data.size,
@@ -716,7 +706,8 @@ class BottomDialog {
                                             Text(
                                               data.price == 0
                                                   ? "BID"
-                                                  : "\$" + data.price.toString(),
+                                                  : "\$" +
+                                                      data.price.toString(),
                                               style: TextStyle(
                                                 fontFamily: AppTheme.fontText,
                                                 fontWeight: FontWeight.bold,
