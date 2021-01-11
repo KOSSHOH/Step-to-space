@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/ui/delete/delete_screen.dart';
 import 'package:shopping_figma_one/src/ui/home_screen.dart';
 import 'package:shopping_figma_one/src/ui/main_screen.dart';
 
