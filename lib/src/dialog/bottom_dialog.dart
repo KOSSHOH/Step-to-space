@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/bloc/card_bloc.dart';
 import 'package:shopping_figma_one/src/bloc/shopping_block.dart';
 import 'package:shopping_figma_one/src/bloc/size_block.dart';
+import 'package:shopping_figma_one/src/database/database_helper_card.dart';
+import 'package:shopping_figma_one/src/model/card_model.dart';
 import 'package:shopping_figma_one/src/model/item_model.dart';
 import 'package:shopping_figma_one/src/model/size_model.dart';
 
@@ -478,6 +481,9 @@ class BottomDialog {
                       builder: (context, AsyncSnapshot<String> snapshot) {
                         if (snapshot.hasData) {
                           return GestureDetector(
+                            onTap: () {
+                              BottomDialog.itemPayment(context);
+                            },
                             child: Container(
                               padding: EdgeInsets.only(
                                 top: 16,
@@ -502,7 +508,7 @@ class BottomDialog {
                                       color: AppTheme.white,
                                     ),
                                   ),
-                                  SizedBox(width: 38),
+                                  Expanded(child: Container()),
                                   SvgPicture.asset(
                                     "assets/images/chevronRightWhite.svg",
                                   )
@@ -660,106 +666,621 @@ class BottomDialog {
                     ),
                     Expanded(
                       child: StreamBuilder(
-                          stream: sizeBloc.allSize,
-                          builder: (context,
-                              AsyncSnapshot<List<SizeModel>> snapshot) {
-                            if (snapshot.hasData) {
-                              return GridView.count(
-                                  padding: EdgeInsets.only(
-                                    top: 15,
+                        stream: sizeBloc.allSize,
+                        builder:
+                            (context, AsyncSnapshot<List<SizeModel>> snapshot) {
+                          if (snapshot.hasData) {
+                            return GridView.count(
+                                padding: EdgeInsets.only(
+                                  top: 15,
+                                ),
+                                crossAxisCount: 3,
+                                childAspectRatio: 1.0,
+                                mainAxisSpacing: 4.0,
+                                crossAxisSpacing: 4.0,
+                                children: snapshot.data.map((SizeModel data) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      shoppingBloc.fetchAllShopping(data.size);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.all(7.5),
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.black5,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "US " + data.size,
+                                            style: TextStyle(
+                                              fontFamily: AppTheme.fontText,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                              height: 1.45,
+                                              color: AppTheme.black,
+                                            ),
+                                          ),
+                                          SizedBox(height: 3),
+                                          Text(
+                                            data.price == 0
+                                                ? "BID"
+                                                : "\$" + data.price.toString(),
+                                            style: TextStyle(
+                                              fontFamily: AppTheme.fontText,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              height: 1.5,
+                                              color: data.price != 0
+                                                  ? AppTheme.green
+                                                  : AppTheme.black60,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).toList());
+                          }
+                          return GridView.count(
+                              crossAxisCount: 3,
+                              padding: EdgeInsets.only(
+                                top: 15,
+                              ),
+                              children: <String>[
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                                '',
+                              ].map((String url) {
+                                return Container(
+                                  margin: EdgeInsets.all(7.5),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.black5,
+                                    borderRadius: BorderRadius.circular(100),
                                   ),
-                                  crossAxisCount: 3,
-                                  childAspectRatio: 1.0,
-                                  mainAxisSpacing: 4.0,
-                                  crossAxisSpacing: 4.0,
-                                  children: snapshot.data.map((SizeModel data) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        shoppingBloc
-                                            .fetchAllShopping(data.size);
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.all(7.5),
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.black5,
-                                          borderRadius:
-                                              BorderRadius.circular(100),
+                                );
+                              }).toList());
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static void itemPayment(BuildContext context) {
+    DatabaseHelperCard dataBase = new DatabaseHelperCard();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
+              margin: EdgeInsets.only(top: 44),
+              child: Container(
+                padding: EdgeInsets.only(
+                  top: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  color: AppTheme.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 44,
+                      decoration: BoxDecoration(
+                        color: AppTheme.black10,
+                        borderRadius: BorderRadius.circular(
+                          10.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Add Payment Method",
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontText,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        height: 1.5,
+                        color: AppTheme.black,
+                      ),
+                    ),
+                    Expanded(
+                      child: FutureBuilder<List<CardModel>>(
+                        future: dataBase.getProduct(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData)
+                            return ListView.builder(
+                              padding: EdgeInsets.only(
+                                top: 15,
+                                left: 30,
+                                right: 30,
+                              ),
+                              itemCount: snapshot.data.length + 1,
+                              itemBuilder: (BuildContext contex, int index) {
+                                return index == snapshot.data.length
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          BottomDialog.itemAddCard(context);
+                                        },
+                                        child: Container(
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.black5,
+                                            borderRadius: BorderRadius.circular(
+                                              16.0,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                "assets/images/plus.svg",
+                                              ),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                "Add Card",
+                                                style: TextStyle(
+                                                  fontFamily: AppTheme.fontText,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  height: 1.45,
+                                                  color: AppTheme.black,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "US " + data.size,
-                                              style: TextStyle(
-                                                fontFamily: AppTheme.fontText,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                                height: 1.45,
-                                                color: AppTheme.black,
+                                      )
+                                    : Container(
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.white,
+                                          borderRadius: BorderRadius.circular(
+                                            16.0,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 5.32,
+                                              spreadRadius: 0,
+                                              offset: Offset(
+                                                0,
+                                                1.2,
+                                              ),
+                                              color: Color.fromRGBO(
+                                                0,
+                                                0,
+                                                0,
+                                                0.032,
                                               ),
                                             ),
-                                            SizedBox(height: 3),
-                                            Text(
-                                              data.price == 0
-                                                  ? "BID"
-                                                  : "\$" +
-                                                      data.price.toString(),
-                                              style: TextStyle(
-                                                fontFamily: AppTheme.fontText,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16,
-                                                height: 1.5,
-                                                color: data.price != 0
-                                                    ? AppTheme.green
-                                                    : AppTheme.black60,
+                                            BoxShadow(
+                                              blurRadius: 17.87,
+                                              spreadRadius: 0,
+                                              offset: Offset(
+                                                0,
+                                                4.2,
+                                              ),
+                                              color: Color.fromRGBO(
+                                                0,
+                                                0,
+                                                0,
+                                                0.0477,
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    );
-                                  }).toList());
-                            }
-                            return GridView.count(
-                                crossAxisCount: 3,
-                                padding: EdgeInsets.only(
-                                  top: 15,
-                                ),
-                                children: <String>[
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                  '',
-                                ].map((String url) {
-                                  return Container(
-                                    margin: EdgeInsets.all(7.5),
-                                    decoration: BoxDecoration(
-                                      color: AppTheme.black5,
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                  );
-                                }).toList());
-                          }),
+                                      );
+                              },
+                            );
+                          return Container();
+                        },
+                      ),
                     )
                   ],
                 ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  static void itemAddCard(BuildContext context) {
+    TextEditingController numberController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
+    TextEditingController expiryController = TextEditingController();
+    TextEditingController securityCodeController = TextEditingController();
+
+    String number = "", name = "", expiry = "", securityCode = "";
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            numberController.addListener(() {
+              setState(() {
+                number = numberController.text;
+              });
+            });
+            nameController.addListener(() {
+              setState(() {
+                name = nameController.text;
+              });
+            });
+            expiryController.addListener(() {
+              setState(() {
+                expiry = expiryController.text;
+              });
+            });
+            securityCodeController.addListener(() {
+              setState(() {
+                securityCode = securityCodeController.text;
+              });
+            });
+            return Container(
+              margin: EdgeInsets.only(top: 44),
+              padding: EdgeInsets.only(
+                top: 10,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                ),
+                color: AppTheme.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 4,
+                    width: 44,
+                    decoration: BoxDecoration(
+                      color: AppTheme.black10,
+                      borderRadius: BorderRadius.circular(
+                        10.0,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 20,
+                          ),
+                          child: SvgPicture.asset(
+                            "assets/images/chevronLeft.svg",
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            "Add Card",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 64,
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 30,
+                            left: 30,
+                            right: 30,
+                          ),
+                          child: Text(
+                            "Start typing to add your credit card details. Everything will update according to your data.",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                              height: 1.45,
+                              color: AppTheme.black60,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            left: 30,
+                            right: 30,
+                          ),
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: AppTheme.white,
+                            borderRadius: BorderRadius.circular(
+                              16.0,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5.32,
+                                spreadRadius: 0,
+                                offset: Offset(
+                                  0,
+                                  1.2,
+                                ),
+                                color: Color.fromRGBO(
+                                  0,
+                                  0,
+                                  0,
+                                  0.032,
+                                ),
+                              ),
+                              BoxShadow(
+                                blurRadius: 17.87,
+                                spreadRadius: 0,
+                                offset: Offset(
+                                  0,
+                                  4.2,
+                                ),
+                                color: Color.fromRGBO(
+                                  0,
+                                  0,
+                                  0,
+                                  0.0477,
+                                ),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: SvgPicture.asset(
+                                  "assets/images/master_card.svg",
+                                ),
+                                margin: EdgeInsets.only(
+                                  top: 30,
+                                  left: 30,
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Container(
+                                margin: EdgeInsets.only(left: 30),
+                                child: Text(
+                                  number,
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    height: 1.5,
+                                    color: AppTheme.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 10,
+                            left: 50,
+                            right: 50,
+                          ),
+                          child: TextField(
+                            controller: numberController,
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.black,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Expiry Number",
+                              hintStyle: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black30,
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black30,
+                                  width: 0.5,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 10,
+                            left: 50,
+                            right: 50,
+                          ),
+                          child: TextField(
+                            controller: nameController,
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.black,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Full Name",
+                              hintStyle: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black30,
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black30,
+                                  width: 0.5,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 10,
+                            left: 50,
+                            right: 50,
+                          ),
+                          child: TextField(
+                            controller: expiryController,
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.black,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Expiry Date",
+                              hintStyle: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black30,
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black30,
+                                  width: 0.5,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: 10,
+                            left: 50,
+                            right: 50,
+                          ),
+                          child: TextField(
+                            controller: securityCodeController,
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontText,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              height: 1.5,
+                              color: AppTheme.black,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Security Code",
+                              hintStyle: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black30,
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black30,
+                                  width: 0.5,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             );
           },
