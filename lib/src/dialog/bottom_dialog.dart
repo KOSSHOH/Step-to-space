@@ -149,7 +149,6 @@ class BottomDialog {
                         if (snapshot.hasData) {
                           return GestureDetector(
                             onTap: () {
-                              sizeBloc.fetchAllSize();
                               BottomDialog.itemSize(context);
                             },
                             child: Container(
@@ -201,7 +200,6 @@ class BottomDialog {
                         }
                         return GestureDetector(
                           onTap: () {
-                            sizeBloc.fetchAllSize();
                             BottomDialog.itemSize(context);
                           },
                           child: Container(
@@ -484,7 +482,8 @@ class BottomDialog {
                         if (snapshot.hasData) {
                           return GestureDetector(
                             onTap: () {
-                              BottomDialog.itemPayment(context);
+                              Navigator.of(context).pop();
+                              BottomDialog.itemPayment(context, item);
                             },
                             child: Container(
                               padding: EdgeInsets.only(
@@ -576,6 +575,7 @@ class BottomDialog {
   }
 
   static void itemSize(BuildContext context) {
+    sizeBloc.fetchAllSize();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -775,7 +775,7 @@ class BottomDialog {
     );
   }
 
-  static void itemPayment(BuildContext context) {
+  static void itemPayment(BuildContext context, ItemModel itemModel) {
     DatabaseHelperCard dataBase = new DatabaseHelperCard();
     showModalBottomSheet(
       context: context,
@@ -811,15 +811,40 @@ class BottomDialog {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text(
-                      "Add Payment Method",
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontText,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        height: 1.5,
-                        color: AppTheme.black,
-                      ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            BottomDialog.itemBuy(context, itemModel);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: 20,
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/images/chevronLeft.svg",
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "Add Payment Method",
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 64,
+                        ),
+                      ],
                     ),
                     Expanded(
                       child: FutureBuilder<List<CardModel>>(
@@ -837,7 +862,11 @@ class BottomDialog {
                                 return index == snapshot.data.length
                                     ? GestureDetector(
                                         onTap: () {
-                                          BottomDialog.itemAddCard(context);
+                                          Navigator.of(context).pop();
+                                          BottomDialog.itemAddCard(
+                                            context,
+                                            itemModel,
+                                          );
                                         },
                                         child: Container(
                                           height: 200,
@@ -1069,7 +1098,7 @@ class BottomDialog {
     );
   }
 
-  static void itemAddCard(BuildContext context) {
+  static void itemAddCard(BuildContext context, ItemModel itemModel) {
     TextEditingController numberController = TextEditingController();
     TextEditingController nameController = TextEditingController();
     TextEditingController expiryController = TextEditingController();
@@ -1183,6 +1212,7 @@ class BottomDialog {
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
+                            BottomDialog.itemPayment(context, itemModel);
                           },
                           child: Container(
                             margin: EdgeInsets.only(

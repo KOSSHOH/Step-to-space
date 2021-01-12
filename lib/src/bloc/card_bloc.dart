@@ -9,17 +9,12 @@ class CardBloc {
   Observable<List<CardModel>> get allCard => _cardFetcher.stream;
 
   fetchAllCard() async {
-    print("database.length");
     List<CardModel> database = await _repository.databaseItem();
-    print(database.length);
     _cardFetcher.sink.add(database);
   }
 
   fetchSaveCard(CardModel card) async {
     int index = await _repository.databaseItemSave(card);
-    // if (index >= 0) {
-    //   fetchAllCard();
-    // }
   }
 
   dispose() {

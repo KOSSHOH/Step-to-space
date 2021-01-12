@@ -30,7 +30,7 @@ class SizeBloc {
   ];
 
   fetchAllSize() async {
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(milliseconds: 100), () {
       _sizeFetcher.sink.add(list);
     });
   }

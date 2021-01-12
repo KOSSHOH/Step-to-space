@@ -78,7 +78,7 @@ class _ItemScreenState extends State<ItemScreen> {
               backgroundColor: Colors.grey[300],
               floating: true,
               snap: true,
-              brightness: Brightness.dark,
+              brightness: Brightness.light,
               pinned: false,
               expandedHeight: 339,
               flexibleSpace: FlexibleSpaceBar(
@@ -109,6 +109,46 @@ class _ItemScreenState extends State<ItemScreen> {
                               ),
                               child: SvgPicture.asset(
                                 "assets/images/chevronLeft.svg",
+                              ),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          GestureDetector(
+                            onTap: () {
+
+                            },
+                            child: Container(
+                              height: 44,
+                              width: 44,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppTheme.white,
+                                borderRadius: BorderRadius.circular(
+                                  44.0,
+                                ),
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/images/plus.svg",
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              BottomDialog.itemSize(context);
+                            },
+                            child: Container(
+                              height: 44,
+                              width: 44,
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppTheme.white,
+                                borderRadius: BorderRadius.circular(
+                                  44.0,
+                                ),
+                              ),
+                              child: SvgPicture.asset(
+                                "assets/images/more.svg",
                               ),
                             ),
                           ),
@@ -262,7 +302,7 @@ class _ItemScreenState extends State<ItemScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                BottomDialog.itemPayment(context);
+                                BottomDialog.itemBuy(context, widget.itemModel);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
