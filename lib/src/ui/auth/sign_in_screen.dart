@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
-import 'package:shopping_figma_one/src/ui/home_screen.dart';
+import 'file:///C:/Users/SHAHBOZ/AndroidStudioProjects/shopping_figma_one/lib/src/ui/bottom_view/home/popular_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -292,7 +292,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
+                        builder: (context) => PopularScreen(),
                       ),
                     );
                   },

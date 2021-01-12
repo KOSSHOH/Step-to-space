@@ -7,12 +7,16 @@ import 'package:shopping_figma_one/src/model/home_item_model.dart';
 import 'package:shopping_figma_one/src/model/item_model.dart';
 import 'package:shopping_figma_one/src/ui/item/item_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class PopularScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _PopularScreenState createState() => _PopularScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _PopularScreenState extends State<PopularScreen>
+    with AutomaticKeepAliveClientMixin<PopularScreen> {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     homeBloc.fetchAllHome();
@@ -28,64 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, AsyncSnapshot<HomeItemModel> snapshot) {
           if (snapshot.hasData) {
             return ListView(
+              padding: EdgeInsets.only(top: 8,bottom: 44,),
               children: [
                 Container(
-                  margin: EdgeInsets.only(
-                    top: 44,
-                    left: 30,
-                    right: 30,
-                  ),
-                  child: Text(
-                    "Today",
-                    style: TextStyle(
-                      fontFamily: AppTheme.fontDisplay,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                      height: 1.14,
-                      color: AppTheme.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 8,
-                    left: 30,
-                    right: 30,
-                  ),
-                  child: Text.rich(
-                    TextSpan(
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: "New&Popular  ",
-                          style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
-                            height: 1.14,
-                            fontFamily: AppTheme.fontDisplay,
-                            color: AppTheme.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: "Story",
-                          style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
-                            height: 1.14,
-                            fontFamily: AppTheme.fontDisplay,
-                            color: AppTheme.black30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 16,
-                  ),
                   height: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -657,7 +606,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: EdgeInsets.only(
                     top: 12,
                   ),
-                  child:  GridView.count(
+                  child: GridView.count(
                     crossAxisCount: 2,
                     childAspectRatio: 0.3,
                     padding: EdgeInsets.only(

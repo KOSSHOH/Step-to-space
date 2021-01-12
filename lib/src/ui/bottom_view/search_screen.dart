@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 
-class DeleteScreen extends StatefulWidget {
+class SearchScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _DeleteScreenState();
+    return _SearchScreenState();
   }
 }
 
-class _DeleteScreenState extends State<DeleteScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
