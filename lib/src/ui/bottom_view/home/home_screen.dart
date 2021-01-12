@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/home/popular_screen.dart';
+import 'package:shopping_figma_one/src/ui/bottom_view/home/story_screen.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
               controller: _tabController,
               children: [
                 PopularScreen(),
-                SearchScreen(),
+                StoryScreen(),
               ],
             ),
           ),
