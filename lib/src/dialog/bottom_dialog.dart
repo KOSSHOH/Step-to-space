@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/card_bloc.dart';
 import 'package:shopping_figma_one/src/bloc/shopping_block.dart';
@@ -839,6 +841,9 @@ class BottomDialog {
                                         },
                                         child: Container(
                                           height: 200,
+                                          margin: EdgeInsets.only(
+                                            top: 20,
+                                          ),
                                           decoration: BoxDecoration(
                                             color: AppTheme.black5,
                                             borderRadius: BorderRadius.circular(
@@ -871,6 +876,9 @@ class BottomDialog {
                                       )
                                     : Container(
                                         height: 200,
+                                        margin: EdgeInsets.only(
+                                          top: 20,
+                                        ),
                                         decoration: BoxDecoration(
                                           color: AppTheme.white,
                                           borderRadius: BorderRadius.circular(
@@ -907,6 +915,143 @@ class BottomDialog {
                                             ),
                                           ],
                                         ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: SvgPicture.asset(
+                                                "assets/images/master_card.svg",
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                top: 30,
+                                                left: 30,
+                                              ),
+                                            ),
+                                            Expanded(child: Container()),
+                                            Container(
+                                              margin: EdgeInsets.only(
+                                                left: 30,
+                                                bottom: 10,
+                                              ),
+                                              child: Text(
+                                                snapshot.data[index].number,
+                                                style: TextStyle(
+                                                  fontFamily: AppTheme.fontText,
+                                                  fontStyle: FontStyle.normal,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14,
+                                                  height: 1.5,
+                                                  color: AppTheme.black,
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Card Holder",
+                                                          style: TextStyle(
+                                                            fontFamily: AppTheme
+                                                                .fontText,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 11,
+                                                            height: 1.45,
+                                                            color: AppTheme
+                                                                .black30,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 4),
+                                                        Text(
+                                                          snapshot
+                                                              .data[index].name,
+                                                          style: TextStyle(
+                                                            fontFamily: AppTheme
+                                                                .fontText,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 11,
+                                                            height: 1.45,
+                                                            color: AppTheme
+                                                                .black60,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 12),
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Expires",
+                                                          style: TextStyle(
+                                                            fontFamily: AppTheme
+                                                                .fontText,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 11,
+                                                            height: 1.45,
+                                                            color: AppTheme
+                                                                .black30,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 4),
+                                                        Text(
+                                                          snapshot.data[index]
+                                                              .expiry,
+                                                          style: TextStyle(
+                                                            fontFamily: AppTheme
+                                                                .fontText,
+                                                            fontStyle: FontStyle
+                                                                .normal,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 11,
+                                                            height: 1.45,
+                                                            color: AppTheme
+                                                                .black60,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              margin: EdgeInsets.only(
+                                                left: 30,
+                                                right: 30,
+                                                bottom: 30,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       );
                               },
                             );
@@ -931,6 +1076,14 @@ class BottomDialog {
     TextEditingController securityCodeController = TextEditingController();
 
     String number = "", name = "", expiry = "", securityCode = "";
+    bool isBack = true, isNext = false;
+
+    var maskCardNumberFormatter = new MaskTextInputFormatter(
+        mask: '#### #### #### ####', filter: {"#": RegExp(r'[0-9]')});
+    var maskCardDateFormatter = new MaskTextInputFormatter(
+        mask: '##/##', filter: {"#": RegExp(r'[0-9]')});
+    var maskCardSecurityCodeFormatter = new MaskTextInputFormatter(
+        mask: '###', filter: {"#": RegExp(r'[0-9]')});
 
     showModalBottomSheet(
       context: context,
@@ -940,347 +1093,662 @@ class BottomDialog {
           builder: (BuildContext context, setState) {
             numberController.addListener(() {
               setState(() {
+                isBack = true;
                 number = numberController.text;
+                if (number.length == 19 &&
+                    name.length > 0 &&
+                    expiry.length == 5 &&
+                    securityCode.length == 3) {
+                  isNext = true;
+                } else {
+                  isNext = false;
+                }
               });
             });
             nameController.addListener(() {
               setState(() {
+                isBack = true;
                 name = nameController.text;
+                if (number.length == 19 &&
+                    name.length > 0 &&
+                    expiry.length == 5 &&
+                    securityCode.length == 3) {
+                  isNext = true;
+                } else {
+                  isNext = false;
+                }
               });
             });
             expiryController.addListener(() {
               setState(() {
+                isBack = true;
                 expiry = expiryController.text;
+                if (number.length == 19 &&
+                    name.length > 0 &&
+                    expiry.length == 5 &&
+                    securityCode.length == 3) {
+                  isNext = true;
+                } else {
+                  isNext = false;
+                }
               });
             });
             securityCodeController.addListener(() {
               setState(() {
+                isBack = false;
                 securityCode = securityCodeController.text;
+                if (number.length == 19 &&
+                    name.length > 0 &&
+                    expiry.length == 5 &&
+                    securityCode.length == 3) {
+                  isNext = true;
+                } else {
+                  isNext = false;
+                }
               });
             });
-            return Container(
-              margin: EdgeInsets.only(top: 44),
+            return Padding(
               padding: EdgeInsets.only(
-                top: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
+              child: Container(
+                margin: EdgeInsets.only(top: 44),
+                padding: EdgeInsets.only(
+                  top: 10,
                 ),
-                color: AppTheme.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 4,
-                    width: 44,
-                    decoration: BoxDecoration(
-                      color: AppTheme.black10,
-                      borderRadius: BorderRadius.circular(
-                        10.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  color: AppTheme.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 44,
+                      decoration: BoxDecoration(
+                        color: AppTheme.black10,
+                        borderRadius: BorderRadius.circular(
+                          10.0,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            left: 20,
-                          ),
-                          child: SvgPicture.asset(
-                            "assets/images/chevronLeft.svg",
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Add Card",
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              height: 1.5,
-                              color: AppTheme.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 64,
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView(
+                    SizedBox(height: 20),
+                    Row(
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 30,
-                            left: 30,
-                            right: 30,
-                          ),
-                          child: Text(
-                            "Start typing to add your credit card details. Everything will update according to your data.",
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 14,
-                              height: 1.45,
-                              color: AppTheme.black60,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: 20,
+                            ),
+                            child: SvgPicture.asset(
+                              "assets/images/chevronLeft.svg",
                             ),
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 20,
-                            left: 30,
-                            right: 30,
-                          ),
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: AppTheme.white,
-                            borderRadius: BorderRadius.circular(
-                              16.0,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 5.32,
-                                spreadRadius: 0,
-                                offset: Offset(
-                                  0,
-                                  1.2,
-                                ),
-                                color: Color.fromRGBO(
-                                  0,
-                                  0,
-                                  0,
-                                  0.032,
-                                ),
-                              ),
-                              BoxShadow(
-                                blurRadius: 17.87,
-                                spreadRadius: 0,
-                                offset: Offset(
-                                  0,
-                                  4.2,
-                                ),
-                                color: Color.fromRGBO(
-                                  0,
-                                  0,
-                                  0,
-                                  0.0477,
-                                ),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                child: SvgPicture.asset(
-                                  "assets/images/master_card.svg",
-                                ),
-                                margin: EdgeInsets.only(
-                                  top: 30,
-                                  left: 30,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                              Container(
-                                margin: EdgeInsets.only(left: 30),
-                                child: Text(
-                                  number,
-                                  style: TextStyle(
-                                    fontFamily: AppTheme.fontText,
-                                    fontStyle: FontStyle.normal,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    height: 1.5,
-                                    color: AppTheme.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 10,
-                            left: 50,
-                            right: 50,
-                          ),
-                          child: TextField(
-                            controller: numberController,
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              height: 1.5,
-                              color: AppTheme.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Expiry Number",
-                              hintStyle: TextStyle(
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "Add Card",
+                              style: TextStyle(
                                 fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 height: 1.5,
-                                color: AppTheme.black30,
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black30,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black,
-                                  width: 0.5,
-                                ),
+                                color: AppTheme.black,
                               ),
                             ),
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(
-                            top: 10,
-                            left: 50,
-                            right: 50,
-                          ),
-                          child: TextField(
-                            controller: nameController,
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              height: 1.5,
-                              color: AppTheme.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Full Name",
-                              hintStyle: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
-                                height: 1.5,
-                                color: AppTheme.black30,
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black30,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black,
-                                  width: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 10,
-                            left: 50,
-                            right: 50,
-                          ),
-                          child: TextField(
-                            controller: expiryController,
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              height: 1.5,
-                              color: AppTheme.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Expiry Date",
-                              hintStyle: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
-                                height: 1.5,
-                                color: AppTheme.black30,
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black30,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black,
-                                  width: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                            top: 10,
-                            left: 50,
-                            right: 50,
-                          ),
-                          child: TextField(
-                            controller: securityCodeController,
-                            style: TextStyle(
-                              fontFamily: AppTheme.fontText,
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              height: 1.5,
-                              color: AppTheme.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: "Security Code",
-                              hintStyle: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16,
-                                height: 1.5,
-                                color: AppTheme.black30,
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black30,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: AppTheme.black,
-                                  width: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
+                          width: 64,
                         ),
                       ],
                     ),
-                  )
-                ],
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 30,
+                              left: 30,
+                              right: 30,
+                            ),
+                            child: Text(
+                              "Start typing to add your credit card details. Everything will update according to your data.",
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14,
+                                height: 1.45,
+                                color: AppTheme.black60,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 20,
+                              left: 30,
+                              right: 30,
+                            ),
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: AppTheme.white,
+                              borderRadius: BorderRadius.circular(
+                                16.0,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 5.32,
+                                  spreadRadius: 0,
+                                  offset: Offset(
+                                    0,
+                                    1.2,
+                                  ),
+                                  color: Color.fromRGBO(
+                                    0,
+                                    0,
+                                    0,
+                                    0.032,
+                                  ),
+                                ),
+                                BoxShadow(
+                                  blurRadius: 17.87,
+                                  spreadRadius: 0,
+                                  offset: Offset(
+                                    0,
+                                    4.2,
+                                  ),
+                                  color: Color.fromRGBO(
+                                    0,
+                                    0,
+                                    0,
+                                    0.0477,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            child: !isBack
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: 30,
+                                        ),
+                                        height: 39,
+                                        width: double.infinity,
+                                        color: AppTheme.black5,
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          top: 21,
+                                          left: 20,
+                                          right: 95,
+                                        ),
+                                        height: 35,
+                                        width: double.infinity,
+                                        color: AppTheme.black5,
+                                        child: Row(
+                                          children: [
+                                            Expanded(child: Container()),
+                                            Container(
+                                              height: 35,
+                                              width: 48,
+                                              child: Column(
+                                                children: [
+                                                  Expanded(
+                                                    child: Center(
+                                                      child: Text(
+                                                        securityCode,
+                                                        style: TextStyle(
+                                                          fontFamily:
+                                                              AppTheme.fontText,
+                                                          fontStyle:
+                                                              FontStyle.normal,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 12,
+                                                          height: 1.33,
+                                                          color: AppTheme.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 48,
+                                                    height: 0.5,
+                                                    color: AppTheme.black,
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        child: SvgPicture.asset(
+                                          "assets/images/master_card.svg",
+                                        ),
+                                        margin: EdgeInsets.only(
+                                          top: 30,
+                                          left: 30,
+                                        ),
+                                      ),
+                                      Expanded(child: Container()),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          left: 30,
+                                          bottom: 10,
+                                        ),
+                                        child: Text(
+                                          number,
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontText,
+                                            fontStyle: FontStyle.normal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                            height: 1.5,
+                                            color: AppTheme.black,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Card Holder",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          AppTheme.fontText,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 11,
+                                                      height: 1.45,
+                                                      color: AppTheme.black30,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    name,
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          AppTheme.fontText,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 11,
+                                                      height: 1.45,
+                                                      color: AppTheme.black60,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 12),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Expires",
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          AppTheme.fontText,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 11,
+                                                      height: 1.45,
+                                                      color: AppTheme.black30,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    expiry,
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          AppTheme.fontText,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 11,
+                                                      height: 1.45,
+                                                      color: AppTheme.black60,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        margin: EdgeInsets.only(
+                                          left: 30,
+                                          right: 30,
+                                          bottom: 30,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              left: 50,
+                              right: 50,
+                            ),
+                            child: TextField(
+                              controller: numberController,
+                              inputFormatters: [maskCardNumberFormatter],
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Expiry Number",
+                                hintStyle: TextStyle(
+                                  fontFamily: AppTheme.fontText,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: AppTheme.black30,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black30,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              left: 50,
+                              right: 50,
+                            ),
+                            child: TextField(
+                              controller: nameController,
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Full Name",
+                                hintStyle: TextStyle(
+                                  fontFamily: AppTheme.fontText,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: AppTheme.black30,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black30,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              left: 50,
+                              right: 50,
+                            ),
+                            child: TextField(
+                              controller: expiryController,
+                              inputFormatters: [maskCardDateFormatter],
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Expiry Date",
+                                hintStyle: TextStyle(
+                                  fontFamily: AppTheme.fontText,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: AppTheme.black30,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black30,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              left: 50,
+                              right: 50,
+                            ),
+                            child: TextField(
+                              controller: securityCodeController,
+                              inputFormatters: [maskCardSecurityCodeFormatter],
+                              style: TextStyle(
+                                fontFamily: AppTheme.fontText,
+                                fontStyle: FontStyle.normal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                height: 1.5,
+                                color: AppTheme.black,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: "Security Code",
+                                hintStyle: TextStyle(
+                                  fontFamily: AppTheme.fontText,
+                                  fontStyle: FontStyle.normal,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: AppTheme.black30,
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black30,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: AppTheme.black,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          isNext
+                              ? Row(
+                                  children: [
+                                    Expanded(child: Container()),
+                                    GestureDetector(
+                                      onTap: () {
+                                        cardBloc.fetchSaveCard(
+                                          CardModel(
+                                            number: number,
+                                            name: name,
+                                            expiry: expiry,
+                                            securityCode: securityCode,
+                                          ),
+                                        );
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          top: 46,
+                                        ),
+                                        padding: EdgeInsets.only(
+                                          top: 16,
+                                          bottom: 16,
+                                          left: 30,
+                                          right: 30,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.blue,
+                                          borderRadius:
+                                              BorderRadius.circular(60.0),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Save",
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                height: 1.5,
+                                                color: AppTheme.white,
+                                              ),
+                                            ),
+                                            Container(width: 37),
+                                            SvgPicture.asset(
+                                              "assets/images/chevronRightWhite.svg",
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                  ],
+                                )
+                              : Row(
+                                  children: [
+                                    Expanded(child: Container()),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          top: 46,
+                                        ),
+                                        padding: EdgeInsets.only(
+                                          top: 16,
+                                          bottom: 16,
+                                          left: 61,
+                                          right: 61,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.white,
+                                          borderRadius:
+                                              BorderRadius.circular(60.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Color.fromRGBO(0, 0, 0, 0.03),
+                                              spreadRadius: 0,
+                                              blurRadius: 20,
+                                              offset: Offset(
+                                                0,
+                                                4,
+                                              ), // changes position of shadow
+                                            ),
+                                            BoxShadow(
+                                              color:
+                                                  Color.fromRGBO(0, 0, 0, 0.03),
+                                              spreadRadius: 0,
+                                              blurRadius: 4,
+                                              offset: Offset(
+                                                0,
+                                                2,
+                                              ), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Save",
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                height: 1.5,
+                                                color: AppTheme.black30,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                  ],
+                                )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           },

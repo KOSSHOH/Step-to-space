@@ -37,7 +37,7 @@ class DatabaseHelperCard {
 
   void _onCreate(Database db, int newVersion) async {
     await db.execute('CREATE TABLE $tableNote('
-        '$columnNumber INTEGER PRIMARY KEY AUTOINCREMENT, '
+        '$columnNumber TEXT PRIMARY KEY, '
         '$columnName TEXT, '
         '$columnExpiry TEXT, '
         '$columnSecurityCode TEXT)');

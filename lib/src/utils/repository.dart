@@ -6,4 +6,7 @@ class Repository {
   DatabaseHelperCard databaseHelper = new DatabaseHelperCard();
 
   Future<List<CardModel>> databaseItem() => databaseHelper.getProduct();
+
+  Future<int> databaseItemSave(CardModel card) =>
+      databaseHelper.saveProducts(card);
 }
