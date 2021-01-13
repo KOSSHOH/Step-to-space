@@ -32,7 +32,10 @@ class _PopularScreenState extends State<PopularScreen>
         builder: (context, AsyncSnapshot<HomeItemModel> snapshot) {
           if (snapshot.hasData) {
             return ListView(
-              padding: EdgeInsets.only(top: 8,bottom: 44,),
+              padding: EdgeInsets.only(
+                top: 8,
+                bottom: 44,
+              ),
               children: [
                 Container(
                   height: MediaQuery.of(context).size.width,
@@ -252,8 +255,11 @@ class _PopularScreenState extends State<PopularScreen>
                               Container(
                                 child: Center(
                                   child: Container(
-                                    child: Image.asset(
-                                      value.image,
+                                    child: Hero(
+                                      child: Image.asset(
+                                        value.image,
+                                      ),
+                                      tag: value,
                                     ),
                                     height: 50,
                                     width: 70,
@@ -500,8 +506,12 @@ class _PopularScreenState extends State<PopularScreen>
                                       margin: EdgeInsets.only(
                                         left: 15,
                                       ),
-                                      child: Image.asset(
-                                        snapshot.data.recommended[index].image,
+                                      child: Hero(
+                                        child: Image.asset(
+                                          snapshot
+                                              .data.recommended[index].image,
+                                        ),
+                                        tag: snapshot.data.recommended[index],
                                       ),
                                       height: 85,
                                       width: 120,
@@ -638,8 +648,11 @@ class _PopularScreenState extends State<PopularScreen>
                               Container(
                                 child: Center(
                                   child: Container(
-                                    child: Image.asset(
-                                      value.image,
+                                    child: Hero(
+                                      child: Image.asset(
+                                        value.image,
+                                      ),
+                                      tag: value,
                                     ),
                                     height: 50,
                                     width: 70,
@@ -777,8 +790,11 @@ class _PopularScreenState extends State<PopularScreen>
                               Container(
                                 child: Center(
                                   child: Container(
-                                    child: Image.asset(
-                                      value.image,
+                                    child: Hero(
+                                      child: Image.asset(
+                                        value.image,
+                                      ),
+                                      tag: value,
                                     ),
                                     height: 50,
                                     width: 70,
