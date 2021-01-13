@@ -5,6 +5,7 @@ import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/story_bloc.dart';
 import 'package:shopping_figma_one/src/model/story_model.dart';
 import 'package:shopping_figma_one/src/ui/item/story_image_item_screen.dart';
+import 'package:shopping_figma_one/src/ui/item/story_video_item_screen.dart';
 
 class StoryScreen extends StatefulWidget {
   @override
@@ -50,7 +51,15 @@ class _StoryScreenState extends State<StoryScreen>
                               ),
                             ),
                           )
-                        : null;
+                        : snapshot.data[index].type == "video"
+                            ? Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => StoryVideoItemScreen(
+                                    itemModel: snapshot.data[index],
+                                  ),
+                                ),
+                              )
+                            : null;
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.width - 30,
@@ -148,9 +157,14 @@ class _StoryScreenState extends State<StoryScreen>
                                             child: Container(
                                               height: 16,
                                               width: 16,
-                                              child: Image.asset(
-                                                snapshot.data[index].userImage,
-                                                fit: BoxFit.fill,
+                                              child: Hero(
+                                                child: Image.asset(
+                                                  snapshot
+                                                      .data[index].userImage,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                                tag: snapshot
+                                                    .data[index].userImage,
                                               ),
                                             ),
                                           ),
