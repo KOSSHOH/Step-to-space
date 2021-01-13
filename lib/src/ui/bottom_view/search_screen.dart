@@ -181,21 +181,35 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               itemCount: listItems.length,
               itemBuilder: (BuildContext ctxt, int index) {
-                return Container(
-                  height: 44,
-                  margin: EdgeInsets.only(
-                    left: 30,
-                    right: 30,
-                  ),
-                  child: Center(
-                    child: Text(
-                      listItems[index],
-                      style: TextStyle(
-                        fontFamily: AppTheme.fontText,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        height: 1.5,
-                        color: AppTheme.black,
+                return GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      animAppBar = 0.0;
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.fade,
+                          child: SearchItemScreen(listItems[index]),
+                        ),
+                      );
+                    });
+                  },
+                  child: Container(
+                    height: 44,
+                    margin: EdgeInsets.only(
+                      left: 30,
+                      right: 30,
+                    ),
+                    child: Center(
+                      child: Text(
+                        listItems[index],
+                        style: TextStyle(
+                          fontFamily: AppTheme.fontText,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          height: 1.5,
+                          color: AppTheme.black,
+                        ),
                       ),
                     ),
                   ),

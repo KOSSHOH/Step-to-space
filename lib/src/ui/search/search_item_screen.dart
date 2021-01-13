@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:rxbus/rxbus.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/search_bloc.dart';
@@ -37,6 +38,7 @@ class _SearchItemScreenState extends State<SearchItemScreen>
 
   @override
   void initState() {
+    searchResultController.text = widget.text;
     Timer(Duration(milliseconds: 1), () {
       setState(() {
         height = 20.0;
@@ -319,7 +321,7 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                                         ),
                                         Expanded(child: Container()),
                                         GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             setState(() {
                                               dataHistory.clear();
                                             });
@@ -381,8 +383,10 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                                                 GestureDetector(
                                                   onTap: () {
                                                     setState(() {
-                                                      dataHistory.deleteProducts(
-                                                          snapshots.data[index]);
+                                                      dataHistory
+                                                          .deleteProducts(
+                                                              snapshots
+                                                                  .data[index]);
                                                     });
                                                   },
                                                   child: SvgPicture.asset(
@@ -398,7 +402,29 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                                   )
                                 ],
                               )
-                            : Container();
+                            : ListView(
+                                children: [
+                                  Container(
+                                    child: Lottie.asset(
+                                        'assets/anim/not_found.json'),
+                                    height: 250,
+                                    margin: EdgeInsets.only(
+                                      top: 125,
+                                    ),
+                                  ),
+                                  Text(
+                                    "No Results Found",
+                                    style: TextStyle(
+                                      fontFamily: AppTheme.fontText,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      height: 1.45,
+                                      color: AppTheme.black,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              );
                       },
                     )
                   : StreamBuilder(

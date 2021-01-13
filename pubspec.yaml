@@ -21,6 +21,7 @@ dependencies:
   mask_text_input_formatter: ^1.0.7
   rxbus: ^0.0.2
   page_transition: ^1.1.7+2
+  lottie: ^0.6.0
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +34,7 @@ flutter:
   assets:
     - assets/images/
     - assets/img/
+    - assets/anim/
 
 
   fonts:

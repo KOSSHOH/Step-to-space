@@ -82,18 +82,23 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(
-                () => _currentIndex = index,
-              );
-            },
-            children: <Widget>[
-              HomeScreen(),
-              SearchScreen(),
-              SplashScreen(),
-            ],
+          Theme(
+            data: ThemeData(
+              platform: TargetPlatform.android,
+            ),
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(
+                      () => _currentIndex = index,
+                );
+              },
+              children: <Widget>[
+                HomeScreen(),
+                SearchScreen(),
+                SplashScreen(),
+              ],
+            ),
           ),
           Column(
             children: [
