@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rxbus/rxbus.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/bloc/search_bloc.dart';
+import 'package:shopping_figma_one/src/database/database_helper_history.dart';
 import 'package:shopping_figma_one/src/model/event_bus/event_message_model.dart';
+import 'package:shopping_figma_one/src/model/item_model.dart';
+import 'package:shopping_figma_one/src/ui/item/item_screen.dart';
 
 class SearchItemScreen extends StatefulWidget {
   final String text;
@@ -14,18 +18,18 @@ class SearchItemScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _SearchScreenState();
+    return _SearchItemScreenState();
   }
 }
 
-String obj = "";
-
-class _SearchScreenState extends State<SearchItemScreen>
+class _SearchItemScreenState extends State<SearchItemScreen>
     with SingleTickerProviderStateMixin {
   var height = 84.0;
   var width = 0.0;
   bool isSearch = false;
   TextEditingController searchResultController = TextEditingController();
+  DatabaseHelperHistory dataHistory = new DatabaseHelperHistory();
+  bool isHistory = true;
 
   var durationTime = Duration(
     milliseconds: 300,
@@ -40,6 +44,21 @@ class _SearchScreenState extends State<SearchItemScreen>
       });
     });
     super.initState();
+  }
+
+  _SearchItemScreenState() {
+    searchResultController.addListener(() {
+      if (searchResultController.text.length > 2) {
+        setState(() {
+          isHistory = false;
+          _getResultData(searchResultController.text);
+        });
+      } else {
+        setState(() {
+          isHistory = true;
+        });
+      }
+    });
   }
 
   @override
@@ -129,6 +148,32 @@ class _SearchScreenState extends State<SearchItemScreen>
                                 child: TextFormField(
                                   textInputAction: TextInputAction.search,
                                   autofocus: true,
+                                  onFieldSubmitted: (value) {
+                                    if (searchResultController.text.length >
+                                        0) {
+                                      var data = dataHistory.getProducts(
+                                          searchResultController.text);
+                                      data.then(
+                                        (value) => {
+                                          if (value == 0)
+                                            {
+                                              dataHistory.saveProducts(
+                                                  searchResultController.text),
+                                            }
+                                          else
+                                            {
+                                              dataHistory.updateProduct(
+                                                  searchResultController.text),
+                                            },
+                                        },
+                                      );
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                    }
+                                  },
                                   style: TextStyle(
                                     fontFamily: AppTheme.fontText,
                                     fontWeight: FontWeight.bold,
@@ -237,15 +282,322 @@ class _SearchScreenState extends State<SearchItemScreen>
                 SizedBox(width: 20),
               ],
             ),
+            Expanded(
+              child: isHistory
+                  ? FutureBuilder<List<String>>(
+                      future: dataHistory.getProdu(),
+                      builder: (context, snapshots) {
+                        if (snapshots.data == null) {
+                          return Container(
+                            child: Center(
+                              child: Text(""),
+                            ),
+                          );
+                        }
+
+                        return snapshots.data.length > 0
+                            ? Column(
+                                children: [
+                                  Container(
+                                    height: 18,
+                                    margin: EdgeInsets.only(
+                                      top: 20,
+                                      left: 30,
+                                      right: 30,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Recent Keywords",
+                                          style: TextStyle(
+                                            fontFamily: AppTheme.fontText,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            height: 1.33,
+                                            color: AppTheme.black30,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                        GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              dataHistory.clear();
+                                            });
+                                          },
+                                          child: Text(
+                                            "Clear All",
+                                            style: TextStyle(
+                                              fontFamily: AppTheme.fontText,
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12,
+                                              height: 1.33,
+                                              color: AppTheme.black60,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.only(
+                                        left: 30,
+                                        right: 30,
+                                        top: 3,
+                                      ),
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: snapshots.data.length,
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              searchResultController.text =
+                                                  snapshots.data[index];
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                              top: 17,
+                                              bottom: 17,
+                                            ),
+                                            color: AppTheme.white,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: Text(
+                                                    snapshots.data[index],
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          AppTheme.fontText,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14,
+                                                      height: 1.43,
+                                                      color: AppTheme.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 12),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      dataHistory.deleteProducts(
+                                                          snapshots.data[index]);
+                                                    });
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    "assets/images/close.svg",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Container();
+                      },
+                    )
+                  : StreamBuilder(
+                      stream: searchBloc.allSearch,
+                      builder:
+                          (context, AsyncSnapshot<List<ItemModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: 30,
+                                  top: 26,
+                                  bottom: 26,
+                                  right: 30,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      snapshot.data.length.toString(),
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        height: 1.33,
+                                        color: AppTheme.black,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      "Result",
+                                      style: TextStyle(
+                                        fontFamily: AppTheme.fontText,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        height: 1.33,
+                                        color: AppTheme.black30,
+                                      ),
+                                    ),
+                                    Expanded(child: Container()),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: GridView.count(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.65,
+                                  padding: EdgeInsets.only(
+                                    left: 22.5,
+                                    right: 22.5,
+                                  ),
+                                  controller: new ScrollController(
+                                    keepScrollOffset: false,
+                                  ),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  children:
+                                      snapshot.data.map((ItemModel value) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => ItemScreen(
+                                              itemModel: value,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        color: AppTheme.white,
+                                        margin: EdgeInsets.only(
+                                          left: 7.5,
+                                          right: 7.5,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: (MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2) -
+                                                  37.5,
+                                              height: (MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2) -
+                                                  37.5,
+                                              decoration: BoxDecoration(
+                                                color: AppTheme.black5,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  12.0,
+                                                ),
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                      top: 23,
+                                                      left: 15,
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                      value.companyImage,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                      left: 15,
+                                                    ),
+                                                    child: Hero(
+                                                      child: Image.asset(
+                                                        value.image,
+                                                      ),
+                                                      tag: value,
+                                                    ),
+                                                    height: 85,
+                                                    width: 120,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                              value.name,
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 12,
+                                                height: 1.33,
+                                                color: AppTheme.black,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              value.type,
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 12,
+                                                height: 1.33,
+                                                color: AppTheme.black30,
+                                              ),
+                                              textAlign: TextAlign.start,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              "\$" + value.price.toString(),
+                                              style: TextStyle(
+                                                fontFamily: AppTheme.fontText,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                height: 1.43,
+                                                color: AppTheme.black,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              )
+                            ],
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+            )
           ],
         ),
       ),
     );
   }
 
-  void _getResultData(int index) async {
+  void _getResultData(String obj) async {
     if (obj.length > 2) {
-      //blocSearch.fetchAllSearch(index, obj, isMnn);
+      searchBloc.fetchAllSearch();
     }
   }
 }
