@@ -34,13 +34,22 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: AppTheme.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(0.0), // here the desired height
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          elevation: 0.0,
+          backgroundColor: AppTheme.white,
+          brightness: Brightness.light,
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
             margin: EdgeInsets.only(
-              top: 44,
+              top: 30,
               left: 30,
               right: 30,
             ),

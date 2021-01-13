@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/story_bloc.dart';
 import 'package:shopping_figma_one/src/model/story_model.dart';
+import 'package:shopping_figma_one/src/ui/item/story_image_item_screen.dart';
 
 class StoryScreen extends StatefulWidget {
   @override
@@ -40,7 +41,17 @@ class _StoryScreenState extends State<StoryScreen>
               ),
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    snapshot.data[index].type == "image"
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => StoryImageItemScreen(
+                                itemModel: snapshot.data[index],
+                              ),
+                            ),
+                          )
+                        : null;
+                  },
                   child: Container(
                     height: MediaQuery.of(context).size.width - 30,
                     margin: EdgeInsets.only(
