@@ -501,7 +501,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         tag: "EVENT_BOTTOM_VIEW",
                       );
                       Navigator.of(context).popUntil((route) => route.isFirst);
-                    }else{
+                    } else {
                       _formKey.currentState.validate();
                     }
                   },
@@ -521,25 +521,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       boxShadow: next
                           ? []
                           : [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.03),
-                          spreadRadius: 0,
-                          blurRadius: 20,
-                          offset: Offset(
-                            0,
-                            4,
-                          ), // changes position of shadow
-                        ),
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.03),
-                          spreadRadius: 0,
-                          blurRadius: 4,
-                          offset: Offset(
-                            0,
-                            2,
-                          ), // changes position of shadow
-                        ),
-                      ],
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.03),
+                                spreadRadius: 0,
+                                blurRadius: 20,
+                                offset: Offset(
+                                  0,
+                                  4,
+                                ), // changes position of shadow
+                              ),
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.03),
+                                spreadRadius: 0,
+                                blurRadius: 4,
+                                offset: Offset(
+                                  0,
+                                  2,
+                                ), // changes position of shadow
+                              ),
+                            ],
                     ),
                     child: Row(
                       children: [
@@ -560,7 +560,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: next ? 12.0 : 0.0,
                         ),
                         AnimatedContainer(
-                          curve: Curves.easeInOut, duration: _duration,
+                          curve: Curves.easeInOut,
+                          duration: _duration,
                           width: next ? 24.0 : 0.0,
                           child: SvgPicture.asset(
                             "assets/images/chevronRightWhite.svg",

@@ -187,8 +187,6 @@ class _MainScreenState extends State<MainScreen> {
     RxBus.register<EventBottomViewModel>(tag: "EVENT_BOTTOM_VIEW").listen(
       (event) => {
         Utils.isLogin().then((value) => {
-              print(value),
-              print(event.index),
               if (value)
                 {
                   setState(() {

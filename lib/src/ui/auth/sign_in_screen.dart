@@ -392,7 +392,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             width: next ? 12.0 : 0.0,
                           ),
                           AnimatedContainer(
-                            curve: Curves.easeInOut, duration: _duration,
+                            curve: Curves.easeInOut,
+                            duration: _duration,
                             width: next ? 24.0 : 0.0,
                             child: SvgPicture.asset(
                               "assets/images/chevronRightWhite.svg",
