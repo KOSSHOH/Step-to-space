@@ -21,6 +21,19 @@ class Utils {
     }
   }
 
+  static Future<bool> isLoginCheck(String name, String password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("name") != null) {
+      if (prefs.getString("name") == name &&
+          prefs.getString("password") == password)
+        return true;
+      else
+        return false;
+    } else {
+      return false;
+    }
+  }
+
   static Future<void> clearData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();

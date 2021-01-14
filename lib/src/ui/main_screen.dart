@@ -6,8 +6,8 @@ import 'package:shopping_figma_one/src/model/event_bus/event_botton_view_model.d
 import 'package:shopping_figma_one/src/model/navigation_item.dart';
 import 'package:shopping_figma_one/src/ui/auth/splash_screen.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/home/home_screen.dart';
-import 'file:///C:/Users/SHAHBOZ/AndroidStudioProjects/shopping_figma_one/lib/src/ui/bottom_view/profile/profile_screen.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/search_screen.dart';
+import 'package:shopping_figma_one/src/ui/bottom_view/profile/profile_screen.dart';
 import 'package:shopping_figma_one/src/utils/utils.dart';
 
 class MainScreen extends StatefulWidget {
