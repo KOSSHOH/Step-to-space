@@ -16,6 +16,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  var _duration = Duration(
+    milliseconds: 270,
+  );
+
   TextEditingController mailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -481,117 +485,94 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             SizedBox(height: 20),
-            !next
-                ? Row(
-                    children: [
-                      Expanded(child: Container()),
-                      GestureDetector(
-                        onTap: () {
-                          _formKey.currentState.validate();
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            top: 16,
-                            bottom: 16,
-                            left: 61,
-                            right: 61,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppTheme.white,
-                            borderRadius: BorderRadius.circular(60.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.03),
-                                spreadRadius: 0,
-                                blurRadius: 20,
-                                offset: Offset(
-                                  0,
-                                  4,
-                                ), // changes position of shadow
-                              ),
-                              BoxShadow(
-                                color: Color.fromRGBO(0, 0, 0, 0.03),
-                                spreadRadius: 0,
-                                blurRadius: 4,
-                                offset: Offset(
-                                  0,
-                                  2,
-                                ), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  height: 1.5,
-                                  color: AppTheme.black30,
-                                ),
-                              ),
-                            ],
+            Row(
+              children: [
+                Expanded(child: Container()),
+                GestureDetector(
+                  onTap: () {
+                    if (next) {
+                      Utils.saveData(
+                        nameController.text,
+                        passwordController.text,
+                        mailController.text,
+                      );
+                      RxBus.post(
+                        EventBottomViewModel(index: 2),
+                        tag: "EVENT_BOTTOM_VIEW",
+                      );
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+                    }else{
+                      _formKey.currentState.validate();
+                    }
+                  },
+                  child: AnimatedContainer(
+                    duration: _duration,
+                    curve: Curves.easeInOut,
+                    padding: EdgeInsets.only(
+                      top: 16,
+                      bottom: 16,
+                      left: next ? 30 : 60,
+                      right: next ? 30 : 60,
+                    ),
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: next ? AppTheme.blue : AppTheme.white,
+                      borderRadius: BorderRadius.circular(60.0),
+                      boxShadow: next
+                          ? []
+                          : [
+                        BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.03),
+                          spreadRadius: 0,
+                          blurRadius: 20,
+                          offset: Offset(
+                            0,
+                            4,
+                          ), // changes position of shadow
+                        ),
+                        BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.03),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: Offset(
+                            0,
+                            2,
+                          ), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontFamily: AppTheme.fontText,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            height: 1.5,
+                            color: next ? AppTheme.white : AppTheme.black30,
                           ),
                         ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      Expanded(child: Container()),
-                      GestureDetector(
-                        onTap: () {
-                          Utils.saveData(
-                            nameController.text,
-                            passwordController.text,
-                            mailController.text,
-                          );
-                          RxBus.post(
-                            EventBottomViewModel(index: 2),
-                            tag: "EVENT_BOTTOM_VIEW",
-                          );
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            top: 16,
-                            bottom: 16,
-                            left: 30,
-                            right: 30,
-                          ),
-                          height: 56,
-                          decoration: BoxDecoration(
-                            color: AppTheme.blue,
-                            borderRadius: BorderRadius.circular(60.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  fontFamily: AppTheme.fontText,
-                                  fontStyle: FontStyle.normal,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  height: 1.5,
-                                  color: AppTheme.white,
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              SvgPicture.asset(
-                                "assets/images/chevronRightWhite.svg",
-                              )
-                            ],
+                        AnimatedContainer(
+                          curve: Curves.easeInOut,
+                          duration: _duration,
+                          width: next ? 12.0 : 0.0,
+                        ),
+                        AnimatedContainer(
+                          curve: Curves.easeInOut, duration: _duration,
+                          width: next ? 24.0 : 0.0,
+                          child: SvgPicture.asset(
+                            "assets/images/chevronRightWhite.svg",
                           ),
                         ),
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  )
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(child: Container()),
+              ],
+            )
           ],
         ),
       ),
