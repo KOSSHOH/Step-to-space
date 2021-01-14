@@ -8,5 +8,15 @@ Flutter Mobile Design for a platform for buying and selling sport products. The 
 
 ## Screenshots
 
-<img src="https://github.com/KOSSHOH/shopping_figma_one/blob/master/screenshots/anim/home.gif" width="48%">
-<img src="https://github.com/KOSSHOH/shopping_figma_one/blob/master/screenshots/anim/search.gif" width="48%">
+<table>
+  <tr>
+    <td>First Screen Page</td>
+     <td>Holiday Mention</td>
+     <td>Present day in purple and selected day in pink</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/KOSSHOH/shopping_figma_one/blob/master/screenshots/add_card.jpg" width="33%"></td>
+    <td><img src="https://github.com/KOSSHOH/shopping_figma_one/blob/master/screenshots/buy.jpg" width="33%"></td>
+    <td><img src="https://github.com/KOSSHOH/shopping_figma_one/blob/master/screenshots/card_list.jpg" width="33%"></td>
+  </tr>
+ </table>
