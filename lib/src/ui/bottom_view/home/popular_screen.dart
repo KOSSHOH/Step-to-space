@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/home_bloc.dart';
 import 'package:shopping_figma_one/src/model/home_item_model.dart';
@@ -16,6 +17,15 @@ class _PopularScreenState extends State<PopularScreen>
     with AutomaticKeepAliveClientMixin<PopularScreen> {
   @override
   bool get wantKeepAlive => true;
+
+  List<int> shimmer = [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+  ];
 
   @override
   void initState() {
@@ -879,7 +889,197 @@ class _PopularScreenState extends State<PopularScreen>
               ],
             );
           }
-          return Container();
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300],
+            highlightColor: Colors.grey[100],
+            child: ListView(
+              padding: EdgeInsets.only(
+                top: 8,
+                bottom: 175,
+              ),
+              children: [
+                Container(
+                  height: 345,
+                  margin: EdgeInsets.only(
+                    left: 14,
+                    right: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      12.0,
+                    ),
+                    color: AppTheme.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: 29,
+                    right: 222,
+                    top: 68,
+                  ),
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AppTheme.white,
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                ),
+                Container(
+                  height: 234,
+                  margin: EdgeInsets.only(
+                    top: 12,
+                  ),
+                  child: ListView.builder(
+                    itemCount: 20,
+                    scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.only(left: 29),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 150,
+                            height: 150,
+                            margin: EdgeInsets.only(
+                              right: 15,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                12,
+                              ),
+                              color: AppTheme.white,
+                            ),
+                          ),
+                          Container(
+                            width: 150,
+                            margin: EdgeInsets.only(
+                              top: 10,
+                              right: 15,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                12,
+                              ),
+                              color: AppTheme.white,
+                            ),
+                            height: 28,
+                          ),
+                          Container(
+                            width: 150,
+                            margin: EdgeInsets.only(
+                              top: 12,
+                              right: 24,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                12,
+                              ),
+                              color: AppTheme.white,
+                            ),
+                            height: 18,
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: 29,
+                    right: 222,
+                    top: 44,
+                  ),
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AppTheme.white,
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                ),
+                Container(
+                  height: 206,
+                  margin: EdgeInsets.only(
+                    top: 12,
+                  ),
+                  child: new GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.3,
+                    padding: EdgeInsets.only(
+                      left: 29,
+                    ),
+                    controller: new ScrollController(
+                      keepScrollOffset: false,
+                    ),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: shimmer.map((int value) {
+                      return Row(
+                        children: [
+                          Container(
+                            width: 88,
+                            height: 88,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                12,
+                              ),
+                              color: AppTheme.white,
+                            ),
+                          ),
+                          SizedBox(width: 15),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 22,
+                                  width: 24,
+                                  margin: EdgeInsets.only(
+                                    bottom: 4,
+                                    top: 9,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.white,
+                                    borderRadius: BorderRadius.circular(
+                                      6,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 22,
+                                  margin: EdgeInsets.only(
+                                    bottom: 12,
+                                    right: 24,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.white,
+                                    borderRadius: BorderRadius.circular(
+                                      6,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 18,
+                                  margin: EdgeInsets.only(
+                                    right: 75,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.white,
+                                    borderRadius: BorderRadius.circular(
+                                      6,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
