@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rxbus/rxbus.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/model/event_bus/event_botton_view_model.dart';
+import 'package:shopping_figma_one/src/utils/utils.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -273,14 +276,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
           SizedBox(height: 56),
-          Text(
-            "Sign Out",
-            style: TextStyle(
-              fontFamily: AppTheme.fontDisplay,
-              fontWeight: FontWeight.normal,
-              fontSize: 20,
-              height: 1.4,
-              color: AppTheme.red,
+          GestureDetector(
+            onTap: () {
+              Utils.clearData();
+              RxBus.post(
+                EventBottomViewModel(index: 2),
+                tag: "EVENT_BOTTOM_VIEW",
+              );
+              Navigator.of(context)
+                  .popUntil((route) => route.isFirst);
+
+            },
+            child: Text(
+              "Sign Out",
+              style: TextStyle(
+                fontFamily: AppTheme.fontDisplay,
+                fontWeight: FontWeight.normal,
+                fontSize: 20,
+                height: 1.4,
+                color: AppTheme.red,
+              ),
             ),
           )
         ],

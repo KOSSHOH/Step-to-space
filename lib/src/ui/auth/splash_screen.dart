@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/ui/auth/sign_in_screen.dart';
 import 'package:shopping_figma_one/src/ui/auth/sign_up_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           Container(
             margin: EdgeInsets.only(
-              top: 74,
+              top: 32,
               left: 30,
               right: 30,
             ),
@@ -33,6 +34,30 @@ class _SplashScreenState extends State<SplashScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Container(
+                  margin: EdgeInsets.only(
+                    bottom: 32,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 44,
+                      width: 44,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppTheme.black5,
+                        borderRadius: BorderRadius.circular(
+                          44.0,
+                        ),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/images/chevronLeft.svg",
+                      ),
+                    ),
+                  ),
+                ),
                 Text(
                   "Buy & Sell Authentic",
                   style: TextStyle(

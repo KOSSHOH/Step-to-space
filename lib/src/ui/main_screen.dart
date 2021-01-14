@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:rxbus/rxbus.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
+import 'package:shopping_figma_one/src/model/event_bus/event_botton_view_model.dart';
 import 'package:shopping_figma_one/src/model/navigation_item.dart';
 import 'package:shopping_figma_one/src/ui/auth/splash_screen.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/home/home_screen.dart';
 import 'file:///C:/Users/SHAHBOZ/AndroidStudioProjects/shopping_figma_one/lib/src/ui/bottom_view/profile/profile_screen.dart';
 import 'package:shopping_figma_one/src/ui/bottom_view/search_screen.dart';
+import 'package:shopping_figma_one/src/utils/utils.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -16,6 +19,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+  bool _isLogin = false;
   PageController _pageController;
 
   List<NavigationItem> items = [
@@ -69,6 +73,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    _registerBus();
     _pageController = PageController();
   }
 
@@ -80,6 +85,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Utils.isLogin().then((value) => _isLogin = value);
     return Scaffold(
       body: Stack(
         children: [
@@ -91,7 +97,7 @@ class _MainScreenState extends State<MainScreen> {
               controller: _pageController,
               onPageChanged: (index) {
                 setState(
-                      () => _currentIndex = index,
+                  () => _currentIndex = index,
                 );
               },
               children: <Widget>[
@@ -144,10 +150,26 @@ class _MainScreenState extends State<MainScreen> {
                     var itemIndex = items.indexOf(item);
                     return GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _currentIndex = itemIndex;
-                          _pageController.jumpToPage(itemIndex);
-                        });
+                        if (itemIndex == 2) {
+                          if (_isLogin) {
+                            setState(() {
+                              _currentIndex = itemIndex;
+                              _pageController.jumpToPage(itemIndex);
+                            });
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SplashScreen(),
+                              ),
+                            );
+                          }
+                        } else {
+                          setState(() {
+                            _currentIndex = itemIndex;
+                            _pageController.jumpToPage(itemIndex);
+                          });
+                        }
                       },
                       child: _buildItem(item, _currentIndex == itemIndex),
                     );
@@ -158,6 +180,37 @@ class _MainScreenState extends State<MainScreen> {
           )
         ],
       ),
+    );
+  }
+
+  Future<void> _registerBus() async {
+    RxBus.register<EventBottomViewModel>(tag: "EVENT_BOTTOM_VIEW").listen(
+      (event) => {
+        Utils.isLogin().then((value) => {
+              print(value),
+              print(event.index),
+              if (value)
+                {
+                  setState(() {
+                    _currentIndex = event.index;
+                    _pageController.jumpToPage(event.index);
+                  }),
+                }
+              else
+                {
+                  setState(() {
+                    _currentIndex = 0;
+                    _pageController.jumpToPage(0);
+                  }),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SplashScreen(),
+                    ),
+                  ),
+                }
+            }),
+      },
     );
   }
 
