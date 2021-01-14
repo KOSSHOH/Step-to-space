@@ -49,7 +49,7 @@ class StoryBloc {
   Observable<List<StoryModel>> get allStory => _storyFetcher.stream;
 
   fetchAllStory() async {
-    Timer(Duration(milliseconds: 500), () {
+    Timer(Duration(milliseconds: 1500), () {
       _storyFetcher.sink.add(_list);
     });
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/story_bloc.dart';
 import 'package:shopping_figma_one/src/model/story_model.dart';
@@ -225,7 +226,31 @@ class _StoryScreenState extends State<StoryScreen>
               },
             );
           }
-          return Container();
+          return Shimmer.fromColors(
+            baseColor: Colors.grey[300],
+            highlightColor: Colors.grey[100],
+            child: ListView.builder(
+              itemCount: 20,
+              scrollDirection: Axis.vertical,
+              padding: EdgeInsets.only(
+                left: 14,
+                right: 14,
+                top: 20,
+              ),
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 345,
+                  margin: EdgeInsets.only(
+                    bottom: 20,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                );
+              },
+            ),
+          );
         },
       ),
     );
