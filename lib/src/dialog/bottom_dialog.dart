@@ -775,6 +775,227 @@ class BottomDialog {
     );
   }
 
+  static void searchFilter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
+              margin: EdgeInsets.only(top: 44),
+              child: Container(
+                padding: EdgeInsets.only(
+                  left: 30,
+                  right: 30,
+                  top: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  color: AppTheme.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 4,
+                      width: 44,
+                      decoration: BoxDecoration(
+                        color: AppTheme.black10,
+                        borderRadius: BorderRadius.circular(
+                          10.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      "Filter",
+                      style: TextStyle(
+                        fontFamily: AppTheme.fontText,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        height: 1.5,
+                        color: AppTheme.black,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.only(
+                          top: 18,
+                        ),
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Sort buy",
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontDisplay,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    height: 1.4,
+                                    color: AppTheme.black,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(
+                                  top: 8,
+                                  left: 14,
+                                  bottom: 8,
+                                  right: 14,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.black5,
+                                  borderRadius: BorderRadius.circular(
+                                    40,
+                                  ),
+                                ),
+                                child: Text(
+                                  "Featured",
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    height: 1.43,
+                                    color: AppTheme.black60,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            "Brand",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontDisplay,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                          SizedBox(height: 26),
+                          Text(
+                            "Size Types",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontDisplay,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                          SizedBox(height: 26),
+                          Text(
+                            "Sizes",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontDisplay,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                          SizedBox(height: 26),
+                          Text(
+                            "Price",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontDisplay,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                          SizedBox(height: 26),
+                          Text(
+                            "Releas Years",
+                            style: TextStyle(
+                              fontFamily: AppTheme.fontDisplay,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              height: 1.4,
+                              color: AppTheme.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Container()),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              top: 16,
+                              bottom: 54,
+                            ),
+                            padding: EdgeInsets.only(
+                              top: 16,
+                              bottom: 16,
+                              left: 61,
+                              right: 61,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.white,
+                              borderRadius: BorderRadius.circular(60.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.03),
+                                  spreadRadius: 0,
+                                  blurRadius: 20,
+                                  offset: Offset(
+                                    0,
+                                    4,
+                                  ), // changes position of shadow
+                                ),
+                                BoxShadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.03),
+                                  spreadRadius: 0,
+                                  blurRadius: 4,
+                                  offset: Offset(
+                                    0,
+                                    2,
+                                  ), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Result",
+                                  style: TextStyle(
+                                    fontFamily: AppTheme.fontText,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    height: 1.5,
+                                    color: AppTheme.black30,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Container()),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   static void itemPayment(BuildContext context, ItemModel itemModel) {
     DatabaseHelperCard dataBase = new DatabaseHelperCard();
     showModalBottomSheet(
@@ -1510,7 +1731,7 @@ class BottomDialog {
                                 color: AppTheme.black,
                               ),
                               decoration: InputDecoration(
-                                hintText: "Expiry Number",
+                                hintText: "Card Number",
                                 hintStyle: TextStyle(
                                   fontFamily: AppTheme.fontText,
                                   fontStyle: FontStyle.normal,

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:rxbus/rxbus.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shopping_figma_one/src/app_theme.dart';
 import 'package:shopping_figma_one/src/bloc/search_bloc.dart';
 import 'package:shopping_figma_one/src/database/database_helper_history.dart';
+import 'package:shopping_figma_one/src/dialog/bottom_dialog.dart';
 import 'package:shopping_figma_one/src/model/event_bus/event_message_model.dart';
 import 'package:shopping_figma_one/src/model/item_model.dart';
 import 'package:shopping_figma_one/src/ui/item/item_screen.dart';
@@ -35,6 +37,19 @@ class _SearchItemScreenState extends State<SearchItemScreen>
   var durationTime = Duration(
     milliseconds: 300,
   );
+
+  List<int> shimmer = [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+  ];
 
   @override
   void initState() {
@@ -201,7 +216,9 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            BottomDialog.searchFilter(context);
+                          },
                           child: SvgPicture.asset(
                             "assets/images/filter.svg",
                           ),
@@ -214,7 +231,15 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                           child: height == 84.0
                               ? Container()
                               : GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    setState(() {
+                                      searchResultController.text = "";
+                                      FocusScopeNode currentFocus = FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
+                                    });
+                                  },
                                   child: Container(
                                     color: AppTheme.white5,
                                     margin: EdgeInsets.only(
@@ -611,7 +636,102 @@ class _SearchItemScreenState extends State<SearchItemScreen>
                             ],
                           );
                         }
-                        return Container();
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey[300],
+                          highlightColor: Colors.grey[100],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: 30,
+                                  top: 26,
+                                  bottom: 26,
+                                ),
+                                height: 16,
+                                width: 76,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.white,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                              ),
+                              Expanded(child: GridView.count(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.65,
+                                padding: EdgeInsets.only(
+                                  left: 22.5,
+                                  right: 22.5,
+                                ),
+                                controller: new ScrollController(
+                                  keepScrollOffset: false,
+                                ),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                children: shimmer.map((int value) {
+                                  return Container(
+                                    margin: EdgeInsets.only(
+                                      left: 7.5,
+                                      right: 7.5,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: (MediaQuery.of(context)
+                                              .size
+                                              .width /
+                                              2) -
+                                              37.5,
+                                          height: (MediaQuery.of(context)
+                                              .size
+                                              .width /
+                                              2) -
+                                              37.5,
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.white,
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                              12.0,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                            top: 10,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            color: AppTheme.white,
+                                          ),
+                                          height: 28,
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                            top: 12,
+                                            right: 32,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            color: AppTheme.white,
+                                          ),
+                                          height: 18,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              ),)
+                            ],
+                          ),
+                        );
                       },
                     ),
             )
